@@ -1,13 +1,32 @@
 from django.shortcuts import render
 from django.views import View
 
+from donate_app.models import (
+    Institution,
+    Donation,
+)
+
 
 class LandingPageView(View):
     """
     Class creating landing page view.
     """
     def get(self, request):
-        return render(request, 'index.html')
+
+        bag_count = 0
+        supported_org = Institution.objects.all().count()
+        donations = Donation.objects.all()
+        for donation in donations:
+            bag_count += donation.quantity
+
+        return render(
+            request,
+            'index.html',
+            context={
+                'supported': supported_org,
+                'bag_count': bag_count,
+            },
+        )
 
 
 class RegisterView(View):

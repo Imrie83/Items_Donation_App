@@ -63,9 +63,10 @@ class Donation(models.Model):
     institution = models.ForeignKey(
         to=Institution,
         verbose_name='Instytucja',
-        name='donation',
-        null=False,
+        name='institution',
+        null=True,
         on_delete=models.SET(None),
+        related_name='donation'
     )
     address = models.CharField(
         max_length=255,
