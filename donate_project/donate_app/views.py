@@ -15,9 +15,14 @@ class LandingPageView(View):
 
         bag_count = 0
         supported_org = Institution.objects.all().count()
+
         donations = Donation.objects.all()
         for donation in donations:
             bag_count += donation.quantity
+
+        foundations = Institution.objects.filter(type=1)
+        organization = Institution.objects.filter(type=2)
+        local_collection = Institution.objects.filter(type=3)
 
         return render(
             request,
@@ -25,6 +30,9 @@ class LandingPageView(View):
             context={
                 'supported': supported_org,
                 'bag_count': bag_count,
+                'foundation': foundations,
+                'organization': organization,
+                'local_collection': local_collection,
             },
         )
 
