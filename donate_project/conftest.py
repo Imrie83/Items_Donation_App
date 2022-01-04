@@ -13,7 +13,6 @@ def create_categories():
     cat_3 = Category.objects.update_or_create(
         name='Category 3'
     )
-    return [cat_1, cat_2, cat_3]
 
 
 @pytest.fixture
@@ -26,7 +25,10 @@ def create_institute():
         name='Inst 2',
         type=2,
     )
-    return [institute_1, institute_2]
+    institute_3 = Institution.objects.update_or_create(
+        name='Inst 3',
+        type=3,
+    )
 
 
 @pytest.fixture
@@ -51,4 +53,3 @@ def create_donations(create_institute):
         pick_up_time='12:12',
         pick_up_date='2022-3-3',
     )
-    return [donation_1, donation_2, donation_3]
