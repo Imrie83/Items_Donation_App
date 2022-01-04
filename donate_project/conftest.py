@@ -26,3 +26,29 @@ def create_institute():
         name='Inst 2',
         type=2,
     )
+    return [institute_1, institute_2]
+
+
+@pytest.fixture
+def create_donations(create_institute):
+    inst_1 = Institution.objects.first()
+    inst_2 = Institution.objects.last()
+    donation_1 = Donation.objects.update_or_create(
+        quantity=2,
+        institution=inst_1,
+        pick_up_time='12:12',
+        pick_up_date='2022-3-3',
+    )
+    donation_2 = Donation.objects.update_or_create(
+        quantity=3,
+        institution=inst_1,
+        pick_up_time='12:12',
+        pick_up_date='2022-3-3',
+    )
+    donation_3 = Donation.objects.update_or_create(
+        quantity=7,
+        institution=inst_2,
+        pick_up_time='12:12',
+        pick_up_date='2022-3-3',
+    )
+    return [donation_1, donation_2, donation_3]
