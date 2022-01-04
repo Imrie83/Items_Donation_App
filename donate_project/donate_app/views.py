@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from django.views import View
 from django.core.paginator import Paginator
 
+from donate_app.forms import RegisterForm
 from donate_app.models import (
     Institution,
     Donation,
@@ -60,7 +63,23 @@ class RegisterView(View):
     Class creating registration page view.
     """
     def get(self, request):
-        return render(request, 'register.html')
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
+
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = User.objects.create(
+                username=form.cleaned_data['email'],
+                first_name=form.cleaned_data['name'],
+                last_name=form.cleaned_data['surname'],
+                email=form.cleaned_data['email'],
+            )
+            user.password = make_password(form.cleaned_data['password'])
+            user.save()
+
+            return redirect('/login/')
+        return render(request, 'register.html', {'form': form})
 
 
 class LoginView(View):
