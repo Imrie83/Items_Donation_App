@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -88,6 +89,30 @@ class LoginView(View):
     """
     def get(self, request):
         return render(request, 'login.html')
+
+    def post(self, request):
+
+        if not User.objects.filter(username=request.POST.get('email')).exists():
+            return redirect('/register/')
+
+        user = authenticate(
+            username=request.POST.get('email'),
+            password=request.POST.get('password'),
+        )
+        if user:
+            login(request, user)
+            return redirect('/')
+        else:
+            return redirect('/login/')
+
+
+class LogoutView(View):
+    """
+    Class creating a view allowing for user to logout
+    """
+    def get(self, request):
+        logout(request)
+        return redirect('/')
 
 
 class AddDonationView(View):
