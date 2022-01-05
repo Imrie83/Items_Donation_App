@@ -1,4 +1,6 @@
 import pytest
+from django.contrib.auth.models import User
+
 from donate_app.models import Category, Institution, Donation
 
 
@@ -53,3 +55,13 @@ def create_donations(create_institute):
         pick_up_time='12:12',
         pick_up_date='2022-3-3',
     )
+
+
+@pytest.fixture
+def create_user():
+    user = User.objects.create_user(
+        username='test@gmail.com',
+        email='test@gmail.com',
+        password='test',
+    )
+    return [user]
