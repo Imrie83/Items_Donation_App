@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
@@ -8,7 +9,7 @@ from django.core.paginator import Paginator
 from donate_app.forms import RegisterForm
 from donate_app.models import (
     Institution,
-    Donation,
+    Donation, Category,
 )
 
 
@@ -115,9 +116,19 @@ class LogoutView(View):
         return redirect('/')
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
     """
     Class creating donation page view.
     """
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
     def get(self, request):
-        return render(request, 'form.html')
+        categories = Category.objects.all()
+        institutions = Institution.objects.all()
+        return render(
+            request,
+            'form.html',
+            context={
+                'categories': categories,
+                'institutions': institutions,
+            })
