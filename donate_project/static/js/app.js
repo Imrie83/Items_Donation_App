@@ -236,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function() {
           institutions.forEach(inst => {
             inst.setAttribute('id', 'invisible');
           })
-
           institutions.forEach(value => {
           let instCategories = Array(value.querySelectorAll('#inst-cats'));
 
@@ -247,16 +246,38 @@ document.addEventListener("DOMContentLoaded", function() {
               }
             });
           });
+          return categories
               });
           });
         });
 
-
       this.slides.forEach(slide => {
         slide.classList.remove("active");
 
-      if (slide.dataset.step == this.currentStep) {
-        slide.classList.add("active");
+        if (slide.dataset.step == this.currentStep) {
+          slide.classList.add("active");
+
+        if (slide.dataset.step == '5') {
+            let address = document.querySelector('[name=address]').value;
+            let city = document.querySelector('[name=city]').value;
+            let postcode = document.querySelector('[name=postcode]').value;
+            let phone = document.querySelector('[name=phone]').value;
+            let date = document.querySelector('[name=data]').value;
+            let time = document.querySelector('[name=time]').value;
+            let comment = document.querySelector('[name=more_info]').value;
+            let bags = document.querySelector('[name=bags]').value;
+            // let organization = document.querySelector('[name=organization]:checked [name=organization-name]');
+            // console.log(organization);
+            document.querySelector('#summary-address').innerHTML = address;
+            document.querySelector('#summary-city').innerHTML = city;
+            document.querySelector('#summary-postcode').innerHTML = postcode;
+            document.querySelector('#summary-phone').innerHTML = phone;
+            document.querySelector('#summary-date').innerHTML = date;
+            document.querySelector('#summary-time').innerHTML = time;
+            document.querySelector('#summary-comment').innerHTML = comment;
+            document.querySelector('#summary-bags').innerHTML = ('Ilość worków do przekazania: ' + bags);
+            // document.querySelector('#summary-organization').innerHTML = ('Dla fundacji ' + organization.name);
+        }
 
       }
       });
