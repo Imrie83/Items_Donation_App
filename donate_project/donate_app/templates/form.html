@@ -132,7 +132,7 @@
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
               {% for institution in institutions %}
-            <div class="form-group form-group--checkbox">
+            <div class="form-group form-group--checkbox institution" id="invisible" data-inst="test">
               <label>
                 <input type="radio" name="organization" value="{{ institution.id }}" />
                 <span class="checkbox radio"></span>
@@ -140,7 +140,11 @@
                   <div class="title">{{ institution.name }}</div>
                   <div class="subtitle">
                     {{ institution.description }}
-
+                  </div>
+                  <div class="inst-cat" id="invisible">
+                      {% for cat in institution.category.all %}
+                        <input type="text" id="inst-cats" value="{{ cat.id }}">
+                      {% endfor %}
                   </div>
                 </span>
               </label>
@@ -259,6 +263,5 @@
         </form>
       </div>
     </section>
-
 {% endblock %}
 

@@ -223,12 +223,42 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // TODO: Validation
 
+      let categories = Array;
+      // get all checkboxes
+      const checkboxes = document.getElementsByName('categories');
+      // get all elements with class institution
+      const institutions = document.querySelectorAll('.institution');
+
+      // create array of checked boxes
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+          categories = Array.from(checkboxes).filter(i => i.checked).map(i => i.value)
+          institutions.forEach(inst => {
+            inst.setAttribute('id', 'invisible');
+          })
+
+          institutions.forEach(value => {
+          let instCategories = Array(value.querySelectorAll('#inst-cats'));
+
+          instCategories.forEach(value =>{
+            value.forEach(cat =>{
+              if (categories.includes(cat.getAttribute('value'))){
+                cat.parentElement.parentElement.parentElement.parentElement.setAttribute('id', 'visible');
+              }
+            });
+          });
+              });
+          });
+        });
+
+
       this.slides.forEach(slide => {
         slide.classList.remove("active");
 
-        if (slide.dataset.step == this.currentStep) {
-          slide.classList.add("active");
-        }
+      if (slide.dataset.step == this.currentStep) {
+        slide.classList.add("active");
+
+      }
       });
 
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;

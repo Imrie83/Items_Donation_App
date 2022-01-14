@@ -167,6 +167,11 @@ img {
  * 2. Remove the margin in Firefox and Safari.
  */
 /* line 160, scss/vendor/_normalize.scss */
+#invisible {
+  display: none;
+}
+#visible {
+}
 button,
 input,
 optgroup,
