@@ -1,4 +1,7 @@
 import pytest
+from django.contrib import auth
+from django.contrib.auth.models import User
+
 from donate_app.models import (
     Category,
     Institution,
@@ -59,3 +62,47 @@ def test_dynamic_institutions(client, create_institute):
     assert org.name == 'Inst 2'
     assert loc.name == 'Inst 3'
 
+
+@pytest.mark.django_db
+def test_register_user(client):
+    assert len(User.objects.all()) == 0
+
+    response = client.post(
+        '/register/',
+        {
+            'name': 'Marcin',
+            'surname': 'Nazwisko',
+            'email': 'test@google.com',
+            'password': 'test',
+            'password2': 'test',
+        }
+    )
+
+    assert response.status_code == 302
+    assert len(User.objects.all()) == 1
+
+    user = User.objects.last()
+    assert user.email == 'test@google.com'
+
+
+@pytest.mark.django_db
+def test_login_user(client, create_user):
+    assert User.objects.get(email='test@gmail.com')
+
+    response = client.post(
+        '/login/',
+        {
+            'username': 'test@gmail.com',
+            'password': 'test',
+        }
+    )
+    assert response.status_code == 302
+    assert '/' in response.url
+
+
+@pytest.mark.django_db
+def test_logout_user(client, create_user):
+    user = client.force_login(create_user[0])
+    assert auth.get_user(client).username == 'test@gmail.com'
+    client.logout()
+    assert auth.get_user(client).username == ''
