@@ -132,12 +132,12 @@
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
 
               {% for institution in institutions %}
-            <div class="form-group form-group--checkbox institution" id="invisible" data-inst="test">
+            <div class="form-group form-group--checkbox institution" id="invisible">
               <label>
-                <input type="radio" name="organization" value="{{ institution.id }}" />
+                <input type="radio" name="organization" value="{{ institution.id }}" data-name="{{ institution.name }}" />
                 <span class="checkbox radio"></span>
                 <span class="description">
-                  <div class="title" name="organization-name">{{ institution.name }}</div>
+                  <div class="title">{{ institution.name }}</div>
                   <div class="subtitle">
                     {{ institution.description }}
                   </div>
@@ -226,7 +226,7 @@
 
                   <li>
                     <span class="icon icon-hand"></span>
-                    <span class="summary--text" id="summary-organization">
+                    <span class="summary--text" id="summary-org">
                         Dla fundacji "Mam marzenie" w Warszawie
                     </span>
                   </li>
