@@ -47,6 +47,10 @@ class Institution(models.Model):
         related_name='institution',
     )
 
+    class Meta:
+        def __str__(self):
+            return f'{Institution.name}'
+
 
 class Donation(models.Model):
     """
