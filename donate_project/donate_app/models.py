@@ -73,9 +73,10 @@ class Donation(models.Model):
         verbose_name='Adres',
         null=True,
     )
-    phone_number = models.IntegerField(
+    phone_number = models.CharField(
         verbose_name='Telefon',
         null=True,
+        max_length=255,
     )
     city = models.CharField(
         max_length=255,

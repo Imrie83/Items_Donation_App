@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       // Form submit
-      this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
+      // this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
     }
 
     /**
@@ -304,5 +304,4 @@ function getFormData(){
   document.querySelector('#summary-comment').innerHTML = comment;
   document.querySelector('#summary-bags').innerHTML = ('Ilość worków do przekazania: ' + bags);
   document.querySelector('#summary-org').innerHTML = ('Organization: ' + organization);
-
 }
