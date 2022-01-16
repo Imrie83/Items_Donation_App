@@ -48,8 +48,11 @@ class Institution(models.Model):
     )
 
     class Meta:
-        def __str__(self):
-            return f'{Institution.name}'
+        verbose_name = 'Organizacja'
+        verbose_name_plural = 'Organizacje'
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Donation(models.Model):

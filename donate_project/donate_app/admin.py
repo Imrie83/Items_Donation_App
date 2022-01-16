@@ -7,4 +7,4 @@ from donate_app.models import (
 
 @admin.register(Institution)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ['__all__']
+    fields = ['name', 'description', 'type']
