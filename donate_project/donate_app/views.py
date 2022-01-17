@@ -170,8 +170,36 @@ class ConfirmationView(View):
 
 class UserPageView(View):
     def get(self, request):
-        user = request.user
-        donations = Donation.objects.filter(user=user)
+        donations = Donation.objects.filter(user=request.user).order_by(
+            'is_taken',
+            'pick_up_date',
+            'pick_up_time',
+        )
+
+        return render(
+            request,
+            'user-page.html',
+            context={'donations': donations}
+        )
+
+    def post(self, request):
+
+        if request.POST['taken'][-1] == 'y':
+            donation = Donation.objects.get(id=request.POST['taken'][:-1])
+            donation.is_taken = True
+            donation.save()
+
+        elif request.POST['taken'][-1] == 'n':
+            donation = Donation.objects.get(id=request.POST['taken'][:-1])
+            donation.is_taken = False
+            donation.save()
+
+        donations = Donation.objects.filter(user=request.user).order_by(
+            'is_taken',
+            'pick_up_date',
+            'pick_up_time',
+        )
+
         return render(
             request,
             'user-page.html',

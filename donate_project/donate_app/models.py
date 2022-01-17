@@ -115,3 +115,7 @@ class Donation(models.Model):
         related_name='donation',
         on_delete=models.SET(None),
     )
+    is_taken = models.BooleanField(
+        verbose_name='Zabrane',
+        default=False,
+    )

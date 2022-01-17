@@ -43,7 +43,7 @@
             <strong>e-mail:</strong> <i>{{ user.email }}</i></p>
       <h2>Historia</h2>
         {% for donation in donations  %}
-        <p>
+        <p class="archived" id="don-{{ donation.pk }}">
             Organizacja: {{ donation.institution }}<br>
             Ilość worków: {{ donation.quantity }}<br>
             Kategorie:
@@ -51,6 +51,23 @@
                 {{ cat.name }},
             {% endfor %}<br>
             Odbiór: {{ donation.pick_up_date }}
+            {% if donation.is_taken %}
+            (Odebrane!)
+            {% endif %}
+            <form method="post" class="user-form">
+            {% csrf_token %}
+            {% if donation.is_taken %}
+                <button class="btn--usr" type="submit" name="taken" value="{{ donation.pk }}n">Nie Odebrane</button>
+            {% else %}
+                <button class="btn--usr" type="submit" name="taken" value="{{ donation.pk }}y">Odebrane</button>
+            {% endif %}
+            </form>
+            <script>
+                if ('{{ donation.is_taken }}' == 'True') {
+                let get_current_donation = document.querySelector('[id=don-' + {{ donation.pk }} + ']');
+                get_current_donation.style.color = 'rgb(168,168,168)';
+                };
+            </script>
         </p>
         {% endfor %}
     </section>
