@@ -112,5 +112,6 @@ class Donation(models.Model):
         null=True,
         default=None,
         verbose_name='Użytkownik',
+        related_name='donation',
         on_delete=models.SET(None),
     )

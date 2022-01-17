@@ -9,7 +9,7 @@
             <li class="logged-user">
               Witaj {{ user.first_name }}
               <ul class="dropdown">
-                <li><a href="#">Profil</a></li>
+                <li><a href="/user_page/">Profil</a></li>
                 <li><a href="#">Ustawienia</a></li>
                 {% if user.is_superuser %}
                 <li><a href="/admin/">Admin Panel</a></li>
@@ -24,12 +24,12 @@
         </ul>
 
         <ul>
-          <li><a href="" class="btn btn--without-border active">Start</a></li>
-          <li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
-          <li><a href="#about-us" class="btn btn--without-border">O nas</a></li>
-          <li><a href="#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+          <li><a href="/" class="btn btn--without-border">Start</a></li>
+          <li><a href="/#steps" class="btn btn--without-border">O co chodzi?</a></li>
+          <li><a href="/#about-us" class="btn btn--without-border">O nas</a></li>
+          <li><a href="/#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
           <li><a href="/donate/" class="btn btn--without-border">Przekaż dary</a></li>
-          <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
+          <li><a href="/#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
       </nav>
     </header>
@@ -38,13 +38,21 @@
 {% block content %}
     <section class="login-page">
       <h2>Witaj {{ user.first_name }}</h2>
-      <form method="post">
-        <div class="form-group">
-            <p>Imię: {{ user.first_name }}<br>
-            Nazwisko: {{ user.last_name }}<br>
-            e-mail: {{ user.email }}</p>
-        </div>
-      </form>
+            <p><strong>Imię:</strong> <i>{{ user.first_name }}</i><br>
+            <strong>Nazwisko:</strong> <i>{{ user.last_name }}</i><br>
+            <strong>e-mail:</strong> <i>{{ user.email }}</i></p>
+      <h2>Historia</h2>
+        {% for donation in donations  %}
+        <p>
+            Organizacja: {{ donation.institution }}<br>
+            Ilość worków: {{ donation.quantity }}<br>
+            Kategorie:
+            {% for cat in donation.category.all %}
+                {{ cat.name }},
+            {% endfor %}<br>
+            Odbiór: {{ donation.pick_up_date }}
+        </p>
+        {% endfor %}
     </section>
 {% endblock %}
 

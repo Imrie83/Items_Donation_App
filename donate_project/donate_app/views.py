@@ -170,4 +170,10 @@ class ConfirmationView(View):
 
 class UserPageView(View):
     def get(self, request):
-        return render(request, 'user-page.html')
+        user = request.user
+        donations = Donation.objects.filter(user=user)
+        return render(
+            request,
+            'user-page.html',
+            context={'donations': donations}
+        )
