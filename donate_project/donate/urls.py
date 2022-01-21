@@ -22,7 +22,7 @@ from donate_app.views import (
     AddDonationView,
     LogoutView,
     ConfirmationView,
-    UserPageView,
+    UserPageView, EditUserView,
 )
 
 urlpatterns = [
@@ -34,4 +34,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('confirmation/', ConfirmationView.as_view(), name='confirmation'),
     path('user_page/', UserPageView.as_view(), name='user_page'),
+    path('edit-user/', EditUserView.as_view(), name='edit-user'),
 ]

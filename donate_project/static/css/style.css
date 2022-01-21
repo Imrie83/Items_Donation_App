@@ -1848,7 +1848,7 @@ p {
   justify-content: center;
 }
 
-.btn--usr {
+.btn-usr {
   display: inline-block;
   font-size: 1.6rem;
   padding: 1em 1.666em;
@@ -1861,7 +1861,9 @@ p {
   cursor: pointer;
   margin-top: -40px;
 }
-
+.btn-usr:hover {
+  border-color: #f9c910;
+}
 .archived {
   color: #3c3c3c;
 }

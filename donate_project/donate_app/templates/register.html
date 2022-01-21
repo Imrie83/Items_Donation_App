@@ -10,7 +10,7 @@
           Witaj {{ user.first_name }}
           <ul class="dropdown">
             <li><a href="/user_page/">Profil</a></li>
-            <li><a href="#">Ustawienia</a></li>
+            <li><a href="/edit-user/">Ustawienia</a></li>
             {% if user.is_superuser %}
             <li><a href="/admin/">Admin Panel</a></li>
             {% endif %}

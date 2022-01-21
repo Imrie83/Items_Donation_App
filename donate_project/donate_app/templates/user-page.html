@@ -57,9 +57,9 @@
             <form method="post" class="user-form">
             {% csrf_token %}
             {% if donation.is_taken %}
-                <button class="btn--usr" type="submit" name="taken" value="{{ donation.pk }}n">Nie Odebrane</button>
+                <button class="btn-usr btn--without-border" type="submit" name="taken" value="{{ donation.pk }}n">Nie Odebrane</button>
             {% else %}
-                <button class="btn--usr" type="submit" name="taken" value="{{ donation.pk }}y">Odebrane</button>
+                <button class="btn-usr btn--without-border" type="submit" name="taken" value="{{ donation.pk }}y">Odebrane</button>
             {% endif %}
             </form>
             <script>

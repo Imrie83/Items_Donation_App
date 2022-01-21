@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.core.paginator import Paginator
 
-from donate_app.forms import RegisterForm
+from donate_app.forms import RegisterForm, EditUserForm
 from donate_app.models import (
     Institution,
     Donation, Category,
@@ -204,4 +204,31 @@ class UserPageView(View):
             request,
             'user-page.html',
             context={'donations': donations}
+        )
+
+class EditUserView(View):
+    def get(self, request):
+        user = request.user
+        form = EditUserForm(initial={
+            'name': user.first_name,
+            'surname': user.last_name,
+            'email': user.email,
+        })
+        return render(
+            request,
+            'edit-user.html',
+            context={'form': form},
+        )
+
+    def post(self, request):
+        user = request.user
+        form = EditUserForm(request.POST)
+
+        if form.is_valid():
+            return redirect('/')
+
+        return render(
+            request,
+            'edit-user.html',
+            context={'form': form},
         )
