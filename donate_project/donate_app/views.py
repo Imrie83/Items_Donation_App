@@ -225,6 +225,20 @@ class EditUserView(View):
         form = EditUserForm(request.POST)
 
         if form.is_valid():
+            user_check = authenticate(
+                username=user,
+                password=form.cleaned_data['old_password'],
+            )
+
+            if user_check:
+                user.email = form.cleaned_data['email']
+                user.last_name = form.cleaned_data['surname']
+                user.first_name = form.cleaned_data['name']
+                if form.cleaned_data['new_password']:
+                    user.password = make_password(
+                        form.cleaned_data['new_password']
+                    )
+                user.save()
             return redirect('/')
 
         return render(

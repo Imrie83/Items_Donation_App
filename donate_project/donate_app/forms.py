@@ -101,7 +101,7 @@ class EditUserForm(forms.Form):
             'placeholder'] = 'Obecne hasło'
 
     def clean(self):
-        cleaned_data = super(RegisterForm, self).clean()
+        cleaned_data = super(EditUserForm, self).clean()
         password = cleaned_data.get("new_password")
         password2 = cleaned_data.get("new_password2")
         old_password = cleaned_data.get('old_password')
@@ -111,12 +111,12 @@ class EditUserForm(forms.Form):
                 "Hasła muszą być takie same"
             )
 
-        user = authenticate(
-            username=request.POST.get('email'),
-            password=request.POST.get('old_password'),
-        )
-        if not user:
-            raise forms.ValidationError(
-                'niepoprawne obecne hasło!'
-            )
+        # user = authenticate(
+        #     username=request.POST.get('email'),
+        #     password=request.POST.get('old_password'),
+        # )
+        # if not user:
+        #     raise forms.ValidationError(
+        #         'niepoprawne obecne hasło!'
+        #     )
         return cleaned_data
