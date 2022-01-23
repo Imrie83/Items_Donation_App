@@ -1,5 +1,8 @@
+import string
+
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.http import request
 
 
@@ -45,11 +48,34 @@ class RegisterForm(forms.Form):
         cleaned_data = super(RegisterForm, self).clean()
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
+        email = cleaned_data.get("email")
 
         if password != password2:
             raise forms.ValidationError(
                 "Hasła muszą być takie same"
             )
+
+        if not any(char in password for char in string.punctuation):
+            raise forms.ValidationError(
+                'Hasło musi posiadać znak specjalny'
+            )
+        if not any(char.isupper() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną wielką literę'
+            )
+        if not any(char.islower() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną małą literę'
+            )
+        if not any(char.isnumeric() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną cyfrę'
+            )
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError(
+                'adres email zajęty!'
+            )
+
         return cleaned_data
 
 
@@ -105,18 +131,31 @@ class EditUserForm(forms.Form):
         password = cleaned_data.get("new_password")
         password2 = cleaned_data.get("new_password2")
         old_password = cleaned_data.get('old_password')
+        email = cleaned_data.get('email')
 
         if password != password2:
             raise forms.ValidationError(
                 "Hasła muszą być takie same"
             )
 
-        # user = authenticate(
-        #     username=request.POST.get('email'),
-        #     password=request.POST.get('old_password'),
-        # )
-        # if not user:
-        #     raise forms.ValidationError(
-        #         'niepoprawne obecne hasło!'
-        #     )
+        if not any(char in password for char in string.punctuation):
+            raise forms.ValidationError(
+                'Hasło musi posiadać znak specjalny'
+            )
+        if not any(char.isupper() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną wielką literę'
+            )
+        if not any(char.islower() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną małą literę'
+            )
+        if not any(char.isnumeric() for char in password):
+            raise forms.ValidationError(
+                'Hasło musi posiadać conajmniej jedną cyfrę'
+            )
+        if User.objects.filter(username=email).exists():
+            raise forms.ValidationError(
+                'adres email zajęty!'
+            )
         return cleaned_data

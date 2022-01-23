@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.mail import send_mail, mail_admins
 from django.shortcuts import render, redirect
 from django.views import View
 from django.core.paginator import Paginator
@@ -9,7 +10,8 @@ from django.core.paginator import Paginator
 from donate_app.forms import RegisterForm, EditUserForm
 from donate_app.models import (
     Institution,
-    Donation, Category,
+    Donation,
+    Category,
 )
 
 
@@ -58,6 +60,25 @@ class LandingPageView(View):
                 'local_collection': local_collection,
             },
         )
+
+    # def post(self, request):
+    #     name = request.POST.get('name')
+    #     surname = request.POST.get('surname')
+    #     msg = request.POST.get('message')
+    #     send_mail(
+    #         'Subject here',
+    #         'Here is the message.',
+    #         'from@example.com',
+    #         ['czolgista83@gmail.com'],
+    #         fail_silently=False,
+    #     )
+    #     # mail_admins(
+    #     #     subject='User Message',
+    #     #     message=f'From: {name} {surname}\n'
+    #     #             f'{msg}'
+    #     # )
+    #
+    #     return render(request, 'index.html')
 
 
 class RegisterView(View):
