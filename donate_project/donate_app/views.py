@@ -1,7 +1,10 @@
+import os
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.mail import send_mail, mail_admins
 from django.shortcuts import render, redirect
 from django.views import View
@@ -13,6 +16,18 @@ from donate_app.models import (
     Donation,
     Category,
 )
+
+
+def send_email(request):
+    name = request.POST.get('name')
+    surname = request.POST.get('surname')
+    msg = request.POST.get('message')
+
+    mail_admins(
+        subject='Visitor Message',
+        message=f'From: {name} {surname}\n'
+                f'{msg}'
+    )
 
 
 class LandingPageView(View):
@@ -61,24 +76,10 @@ class LandingPageView(View):
             },
         )
 
-    # def post(self, request):
-    #     name = request.POST.get('name')
-    #     surname = request.POST.get('surname')
-    #     msg = request.POST.get('message')
-    #     send_mail(
-    #         'Subject here',
-    #         'Here is the message.',
-    #         'from@example.com',
-    #         ['czolgista83@gmail.com'],
-    #         fail_silently=False,
-    #     )
-    #     # mail_admins(
-    #     #     subject='User Message',
-    #     #     message=f'From: {name} {surname}\n'
-    #     #             f'{msg}'
-    #     # )
-    #
-    #     return render(request, 'index.html')
+    def post(self, request):
+        send_email(request)
+
+        return redirect('/')
 
 
 class RegisterView(View):
@@ -90,6 +91,7 @@ class RegisterView(View):
         return render(request, 'register.html', {'form': form})
 
     def post(self, request):
+
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = User.objects.create(
@@ -155,6 +157,7 @@ class AddDonationView(LoginRequiredMixin, View):
             })
 
     def post(self, request):
+
         current_user = request.user
         categories = request.POST.getlist('categories')
         quantity = request.POST.get('bags')
@@ -187,6 +190,7 @@ class AddDonationView(LoginRequiredMixin, View):
 class ConfirmationView(View):
     def get(self, request):
         return render(request, 'form-confirmation.html')
+
 
 
 class UserPageView(View):
@@ -242,6 +246,7 @@ class EditUserView(View):
         )
 
     def post(self, request):
+
         user = request.user
         form = EditUserForm(request.POST)
 
