@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
@@ -14,7 +15,7 @@ from donate_app.forms import RegisterForm, EditUserForm
 from donate_app.models import (
     Institution,
     Donation,
-    Category,
+    Category, ActivationTokenModel,
 )
 
 
@@ -99,12 +100,47 @@ class RegisterView(View):
                 first_name=form.cleaned_data['name'],
                 last_name=form.cleaned_data['surname'],
                 email=form.cleaned_data['email'],
+                is_active=False,
             )
             user.password = make_password(form.cleaned_data['password'])
             user.save()
+            activation_token = uuid.uuid4()
+            user_activation = ActivationTokenModel.objects.create(
+                user=user,
+                active_token=activation_token,
+            )
+            emai_body = (f'Click on this link to activate your account '
+                         f'{request.get_host()}/activate/{activation_token}/')
+            send_mail(
+                'Account activation',
+                emai_body,
+                'site_admin@donations.com',
+                [user.email],
+            )
 
             return redirect('/login/')
         return render(request, 'register.html', {'form': form})
+
+
+class ActivationView(View):
+    def get(self, request, code):
+        activate_user = ActivationTokenModel.objects.filter(
+            active_token__exact=code,
+        )
+        if activate_user.exists():
+            user = User.objects.filter(
+                id=activate_user[0].user.pk).update(is_active=True)
+            activate_user.delete()
+            return redirect('/activation_complete/')
+
+        # TODO: add handling scenarios
+        #  (already active, user does not exist etx.)
+        return redirect('/activation_complete/')
+
+
+class ActivationCompleteView(View):
+    def get(self, request):
+        return render(request, 'activation_complete.html')
 
 
 class LoginView(View):
