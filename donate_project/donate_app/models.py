@@ -119,3 +119,34 @@ class Donation(models.Model):
         verbose_name='Zabrane',
         default=False,
     )
+
+
+class ActivationTokenModel(models.Model):
+    user = models.ForeignKey(
+        verbose_name='Użytkownik',
+        to=User,
+        null=True,
+        related_name='activation_token',
+        on_delete=models.CASCADE,
+    )
+    active_token = models.CharField(
+        verbose_name='Activation Token',
+        null=True,
+        max_length=255,
+    )
+    active_token_created = models.DateField(auto_now=True)
+
+
+class ResetTokenModel(models.Model):
+    user = models.ForeignKey(
+        verbose_name='Użytkownik',
+        to=User,
+        null=True,
+        related_name='reset_tokens',
+        on_delete=models.CASCADE,
+    )
+    reset_token = models.CharField(
+        null=True,
+        max_length=255,
+    )
+    reset_token_created = models.DateField(auto_now=True)
