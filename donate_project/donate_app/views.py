@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.core import mail
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, mail_admins
 from django.shortcuts import render, redirect
 from django.views import View
@@ -128,14 +129,29 @@ class ActivationView(View):
             active_token__exact=code,
         )
         if activate_user.exists():
-            user = User.objects.filter(
-                id=activate_user[0].user.pk).update(is_active=True)
+            try:
+                edit_user = User.objects.get(id=activate_user[0].user.pk)
+            except ObjectDoesNotExist:
+                msg = 'Użytkownik nie został znaleziony w bazie danych!'
+                return render(request, 'activation_complete.html', context={
+                    'msg': msg,
+                })
+            edit_user.is_active = True
+            edit_user.save()
             activate_user.delete()
-            return redirect('/activation_complete/')
 
-        # TODO: add handling scenarios
-        #  (already active, user does not exist etx.)
-        return redirect('/activation_complete/')
+            msg = 'Konto aktywowane pomyślnie.'
+            return render(request, 'activation_complete.html', context={
+                'msg': msg,
+            })
+        else:
+            msg = '''Konto zostało aktywowane używając tego linka. 
+                  Jeśli twoje konto nie jest aktywne skontaktuj się
+                  z administratorem strony'''
+            return render(request, 'activation_complete.html', context={
+                'msg': msg,
+            })
+
 
 
 class ActivationCompleteView(View):
